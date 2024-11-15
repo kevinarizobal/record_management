@@ -1,0 +1,83 @@
+:root{
+  --teal: #2ec1ac;
+  --teal_hover: #279e8c;
+}
+
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+  font-family: 'Old Standard TT', serif;
+  
+}
+
+#dashboard-menu{
+  position: fixed;
+  height: 100%;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number]  {
+  -appearance: textfield;
+}
+
+.custom-bg{
+  background-color: var(--teal);
+  border: 1px solid var(--teal);
+}
+
+.custom-bg:hover{
+  background-color: var(--teal_hover);
+  border-color: var(--teal_hover);
+}
+
+.h-line{
+  width: 150px;
+  margin: 0 auto;
+  height: 1.7px;
+}
+
+.back-to-top {
+  position: fixed;
+  display: none;
+  right: 30px;
+  bottom: 27px;
+  z-index: 99;
+}
+
+.btn {
+  transition: .5s;
+}
+
+.btn-lg-square {
+  width: 48px;
+  height: 48px;
+}
+
+.btn-lg-square {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: normal;
+  border-radius: 50px;
+}
+
+@media screen and (max-width: 990px){
+  #dashboard-menu{
+    height: auto;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 60px){
+  #main-content{
+    margin-top: 60%;
+  }
+}
