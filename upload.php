@@ -1,66 +1,54 @@
 <?php
-// Include your database connection here
-include('db_connect.php');
+$conn = new mysqli('localhost', 'root', '', 'file_management');
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Check if file is uploaded
-    if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
-        $file = $_FILES['file'];
-        
-        // Generate unique filename
-        $fileName = uniqid() . '-' . basename($file['name']);
-        $filePath = 'uploads/' . $fileName;  // The path to store file
-        
-        // Move the file to the destination folder
-        if (move_uploaded_file($file['tmp_name'], $filePath)) {
-            // Insert file information into database
-            $name = basename($file['name']);
-            $type = 'file';  // 'file' for regular files
-            $createdAt = date('Y-m-d H:i:s');
-            $modifiedAt = $createdAt;
-            
-            // Insert into the `files` table
-            $query = "INSERT INTO `files` (`name`, `path`, `type`, `created_at`, `modified_at`) 
-                      VALUES ('$name', '$filePath', '$type', '$createdAt', '$modifiedAt')";
-            
-            if (mysqli_query($conn, $query)) {
-                echo json_encode(['message' => 'File uploaded successfully']);
-            } else {
-                echo json_encode(['message' => 'Failed to insert into the database']);
-            }
-        } else {
-            echo json_encode(['message' => 'Failed to move uploaded file']);
-        }
-    } elseif (isset($_POST['folderName'])) {
-        // Handle folder creation
-        $folderName = $_POST['folderName'];
-        $folderPath = 'uploads/' . $folderName;  // Path for the folder
+    // Set the uploads directory
+    $uploads_dir = 'uploads';
 
-        // Create the folder on the server
-        if (!file_exists($folderPath)) {
-            if (mkdir($folderPath, 0777, true)) {
-                // Insert folder into the database
-                $createdAt = date('Y-m-d H:i:s');
-                $modifiedAt = $createdAt;
-                
-                $query = "INSERT INTO `files` (`name`, `path`, `type`, `created_at`, `modified_at`) 
-                          VALUES ('$folderName', '$folderPath', 'folder', '$createdAt', '$modifiedAt')";
-                
-                if (mysqli_query($conn, $query)) {
-                    echo json_encode(['message' => 'Folder created successfully']);
-                } else {
-                    echo json_encode(['message' => 'Failed to insert folder into the database']);
-                }
+    // Ensure the uploads directory exists
+    if (!is_dir($uploads_dir)) {
+        mkdir($uploads_dir, 0777, true);
+    }
+
+    // Handle folder creation
+    if (isset($_POST['folder_name'])) {
+        $folder_name = trim($_POST['folder_name']);
+        $path = "$uploads_dir/$folder_name";
+
+        if (!file_exists($path)) {
+            if (mkdir($path, 0777, true)) {
+                $stmt = $conn->prepare("INSERT INTO files (name, type, path) VALUES (?, 'folder', ?)");
+                $stmt->bind_param('ss', $folder_name, $path);
+                $stmt->execute();
+                echo "Folder created successfully.";
             } else {
-                echo json_encode(['message' => 'Failed to create folder']);
+                echo "Error creating folder.";
             }
         } else {
-            echo json_encode(['message' => 'Folder already exists']);
+            echo "Folder already exists.";
+        }
+    }
+    // Handle file upload
+    elseif (isset($_FILES['file'])) {
+        $file = $_FILES['file'];
+        $file_name = basename($file['name']);
+        $target_path = "$uploads_dir/$file_name";
+
+        if (move_uploaded_file($file['tmp_name'], $target_path)) {
+            $stmt = $conn->prepare("INSERT INTO files (name, type, path) VALUES (?, 'file', ?)");
+            $stmt->bind_param('ss', $file_name, $target_path);
+            $stmt->execute();
+            echo "File uploaded successfully.";
+        } else {
+            echo "Error uploading file.";
         }
     } else {
-        echo json_encode(['message' => 'No file or folder data received']);
+        echo "No file or folder data received.";
     }
-} else {
-    echo json_encode(['message' => 'Invalid request method']);
 }
 ?>
