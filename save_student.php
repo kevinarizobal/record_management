@@ -16,7 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $father_name = $conn->real_escape_string(trim($_POST['fname']));
     $guardian_contact_number = $conn->real_escape_string(trim($_POST['gnumber']));
     $guardian_address = $conn->real_escape_string(trim($_POST['gaddress']));
-    $date_enrolled = date('Y-m-d');
 
     // File upload directory
     $upload_dir = 'uploads/';
@@ -46,15 +45,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Insert into students table
     $sql = "INSERT INTO students 
-            (name, email, contact_number, profile_picture, attachment, course, section, gender, date_of_birth, school_id, address, mother_name, father_name, guardian_contact_number, guardian_address, date_enrolled) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            (name, email, contact_number, profile_picture, attachment, course, section, gender, date_of_birth, school_id, address, mother_name, father_name, guardian_contact_number, guardian_address) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     if (!$stmt) {
         die("SQL error: " . $conn->error);
     }
 
     $stmt->bind_param(
-        "ssssssssssssssss",
+        "sssssssssssssss",
         $name,
         $email,
         $contact_number,
@@ -69,8 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mother_name,
         $father_name,
         $guardian_contact_number,
-        $guardian_address,
-        $date_enrolled
+        $guardian_address
     );
 
     if ($stmt->execute()) {
@@ -94,7 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $file_stmt->execute();
         }
 
-        echo "Student enrolled successfully!";
+        echo "<script>alert('Added Successfully!!');</script>";
+        header("Location: add_student.php"); 
     } else {
         echo "Error: " . $stmt->error;
     }
