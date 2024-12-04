@@ -12,6 +12,25 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize the DataTable
+            var table = $('#studentTable').DataTable({
+                "ajax": {
+                    "url": "fetch_students.php", // PHP script to fetch student data
+                    "dataSrc": "data"
+                },
+                "columns": [
+                    { "data": "name" },
+                    { "data": "course" },
+                    { "data": "section" },
+                    { "data": "contact_number" },
+                    { "data": "email" },
+                    { "data": "date_enrolled" }
+                ]
+            });
+        });
+    </script>
     
 </head>
 <body class="bg-light">
@@ -25,10 +44,6 @@
 
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <a data-bs-target="#registerModal" data-bs-toggle="modal" class="btn btn-outline-success fw-bold">Add Student</a>
-                        <form class="d-flex" role="search">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline-success fw-bold" type="submit">Search</button>
-                        </form>
                     </div>
 
                     <!-- Table -->
@@ -59,7 +74,7 @@
 <div class="modal fade" id="registerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-xl">
         <div class="modal-content">
-          <form id="register-form" action="save_student.php" method="POST" enctype="multipart/form-data">>
+          <form id="register-form" action="save_student.php" method="POST" enctype="multipart/form-data">
             <div class="modal-header">
               <h3 class="modal-title d-flex align-items-center">
               <i class="bi bi-person-lines-fill fs-3 me-2"></i>STUDENT INFORMATION
@@ -86,7 +101,7 @@
                     <label class="form-label">Picture</label>
                     <input name="profile" type="file" accept=".jpg, .jpeg, .png, .webp" class="form-control shadow-none" required>
                   </div>
-                  <div class="col-lg-3 mb-3">
+                  <div class="col-lg-3 p-0 mb-3">
                     <label class="form-label">Attachment</label>
                     <input name="attach" type="file" accept=".pdf, .docx, .png, .jpg, .jpeg,  .webp" class="form-control shadow-none" required>
                   </div>
@@ -103,7 +118,7 @@
                     <label class="form-label">Gender</label>
                     <input name="gender" type="text" class="form-control shadow-none" required>
                   </div>
-                  <div class="col-lg-3 mb-3">
+                  <div class="col-lg-3 p-0 mb-3">
                     <label class="form-label">Date of Birth</label>
                     <input name="dob" type="date" class="form-control shadow-none" required>
                   </div>
@@ -128,7 +143,7 @@
                     <label class="form-label">Father's Name</label>
                     <input name="fname" type="text" class="form-control shadow-none" required>
                   </div>
-                  <div class="col-md-6 ps-0 mb-3">
+                  <div class="col-md-12 p-0 mb-3">
                     <label class="form-label">Contact Number</label>
                     <input name="gnumber" type="number" class="form-control shadow-none" required>
                   </div>
@@ -143,7 +158,7 @@
                     <label class="form-label">Guardian's Name</label>
                     <input name="mname" type="text" class="form-control shadow-none" required>
                   </div>
-                  <div class="col-md-6 ps-0 mb-3">
+                  <div class="col-md-6 p-0 mb-3">
                     <label class="form-label">Contact Number</label>
                     <input name="gnumber" type="number" class="form-control shadow-none" required>
                   </div>
@@ -156,20 +171,6 @@
               <div class="text-center my-1">
                 <button type="submit" class="btn btn-dark shadow-none">UPDATE</button>
               </div>
-              <h3><i class="bi bi-file-earmark-text mt-3 me-2"></i>Student Files</h3>
-                    <div class="row card-body">
-                        <div class="col-lg-12">
-                            <div class="card border-0 shadow-lg text-center mt-3">
-                                <img src="img/ict/nso.jpg" alt="">
-                                <div class="card-body">
-                                    <h6 class="card-title">FILE NAME: NSO</h6>
-                                    <a data-bs-target="#registerModal" data-bs-toggle="modal" class="btn btn-success btn-lg">Print</a>
-                                    <a data-bs-target="#registerModal" data-bs-toggle="modal" class="btn btn-danger btn-lg">Delete</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
             </div>
           </form>
         </div>
@@ -179,29 +180,5 @@
 
 <?php require('inc/script.php'); ?>
 <script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
-$(document).ready(function () {
-    $('#studentTable').DataTable({
-        ajax: {
-            url: 'fetch_students.php', // Fetch data from the PHP script
-            dataSrc: 'data'
-        },
-        columns: [
-            { data: 'name' },
-            { data: 'course' },
-            { data: 'year_section' },
-            { data: 'contact_number' },
-            { data: 'email' },
-            { data: 'date_enrolled' }
-        ],
-        responsive: true,
-        paging: true,
-        searching: true,
-    });
-});
-</script>
-
-
 </body>
 </html>
