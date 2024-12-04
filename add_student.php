@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enrollment</title>
     <?php require('links/links.php');?>
+     <!-- Include Bootstrap -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Include DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     
 </head>
 <body class="bg-light">
@@ -12,49 +19,39 @@
 <div class="container-fluid" id="main-content">
     <div class="row">
         <div class="col-lg-10 ms-auto p-4 overflow-hidden">
-            <span class="d-flex justify-content-between align-items-center">
-                <h1 class="mb-2 mt-1">Enrollment - Add Student</h1>
-                
-            </span>
-                <div class="card border-0  shadow-sm mt-4 mb-4 align-content-center">
-                  <div class="card-body">
+            <h1 class="mb-2 mt-1">Enrollment - Add Student</h1>
+            <div class="card border-0 shadow-sm mt-4 mb-4 align-content-center">
+                <div class="card-body">
 
-                    <div class="d-flex justify-content-between align-items-center text-end mb-4">
-                      <a data-bs-target="#registerModal" data-bs-toggle="modal" class="btn btn-outline-success fw-bold">Add Student</a>
-                      <form class="d-flex" role="search">
-                          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                          <button class="btn btn-outline-success fw-bold" type="submit">Search</button>
-                      </form>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <a data-bs-target="#registerModal" data-bs-toggle="modal" class="btn btn-outline-success fw-bold">Add Student</a>
+                        <form class="d-flex" role="search">
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-success fw-bold" type="submit">Search</button>
+                        </form>
                     </div>
 
+                    <!-- Table -->
                     <div class="table-responsive rounded-3">
-                        <table class="table table-hover border text-center" style="min-width: 100px;">
+                        <table id="studentTable" class="table table-hover border text-center">
                             <thead class="text-start">
                                 <tr class="bg-dark text-light">
-                                <th scope="col">Name</th>
-                                <th scope="col">Course</th>
-                                <th scope="col">Year & Section</th>
-                                <th scope="col">Contact</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Date Enrolled</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Course</th>
+                                    <th scope="col">Year & Section</th>
+                                    <th scope="col">Contact</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Date Enrolled</th>
                                 </tr>
                             </thead>
-                            <tbody class="text-start" id="enrolled-student">
-                              <tr>
-                                <td>Juan Luan</td>
-                                <td>BSCS</td>
-                                <td>1 - A</td>
-                                <td>09461109394</td>
-                                <td>juan@gmail.com</td>
-                                <td>11/15/24</td>
-                                
-                              </tr>
+                            <tbody class="text-start">
+                                <!-- DataTables will populate data here -->
                             </tbody>
                         </table>
                     </div>
 
-                    </div>
                 </div>
+            </div>
         </div>
     </div>
 </div>
@@ -182,6 +179,29 @@
 
 <?php require('inc/script.php'); ?>
 <script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+$(document).ready(function () {
+    $('#studentTable').DataTable({
+        ajax: {
+            url: 'fetch_students.php', // Fetch data from the PHP script
+            dataSrc: 'data'
+        },
+        columns: [
+            { data: 'name' },
+            { data: 'course' },
+            { data: 'year_section' },
+            { data: 'contact_number' },
+            { data: 'email' },
+            { data: 'date_enrolled' }
+        ],
+        responsive: true,
+        paging: true,
+        searching: true,
+    });
+});
+</script>
+
 
 </body>
 </html>
