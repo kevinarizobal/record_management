@@ -116,7 +116,10 @@
                   </div>
                   <div class="col-lg-3 ps-0 mb-3">
                     <label class="form-label">Gender</label>
-                    <input name="gender" type="text" class="form-control shadow-none" required>
+                    <select class="form-select shadow-none" name="gender">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
                   </div>
                   <div class="col-lg-3 p-0 mb-3">
                     <label class="form-label">Date of Birth</label>
