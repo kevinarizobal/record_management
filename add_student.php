@@ -108,7 +108,12 @@
                   
                   <div class="col-lg-3 ps-0 mb-3">
                     <label class="form-label">Program</label>
-                    <input name="course" type="text" class="form-control shadow-none" required>
+                    <select class="form-select shadow-none" name="course">
+                        <option value="ICT">ICT</option>
+                        <option value="TST">TST</option>
+                        <option value="BOT">BOT</option>
+                        <option value="BSCS">BSCS</option>
+                    </select>
                   </div>
                   <div class="col-lg-3 mb-3">
                     <label class="form-label">Year level</label>
