@@ -22,7 +22,7 @@
                     <!-- course -->
                     <li class="nav-item">         
                         <button class="btn text-white px-3 w-100 shadow-none text-start d-flex align-items-center justify-content-between" type="button" data-bs-toggle="collapse" data-bs-target="#course">
-                            <span>Course</span>
+                            <span>Program</span>
                             <span><i class="bi bi-stack"></i></span>
                         </button>
                         <div class="collapse show px-3 small mb-1" id="course">
@@ -53,29 +53,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-white" href="add_student.php">Add students</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" href="manage_student.php">Manage Students</a>
-                                </li>
                             </ul>
                         </div>
-                    </li>
-                    <!-- Student to proceed -->
-                    <li class="nav-item">         
-                        <button class="btn text-white px-3 w-100 shadow-none text-start d-flex align-items-center justify-content-between" type="button" data-bs-toggle="collapse" data-bs-target="#proceed">
-                            <span>Student to Proceed</span>
-                            <span><i class="bi bi-file-earmark-bar-graph-fill"></i></span>
-                        </button>
-                        <div class="collapse show px-3 small mb-1" id="proceed">
-                            <ul class="nav nav-pills flex-column rounded border border-white border-secondary">
-                                <li class="nav-item">
-                                    <a class="nav-link text-white" href="proceed_list_student.php">List of students</a>
-                                </li>
-                               
-
-                            </ul>
-                        </div>
-                    </li>
-                    
+                    </li>                    
                     <li class="nav-item">
                         <a class="nav-link text-white d-flex justify-content-between align-items-center" href="archive_file.php">
                             <span>Archive files</span>
