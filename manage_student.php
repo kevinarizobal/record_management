@@ -19,11 +19,12 @@ require('db_connect.php');
     <div class="row">
         <div class="col-lg-10 ms-auto p-4 overflow-hidden">
             <span class="d-flex justify-content-between align-items-center">
-                <h1 class="mb-2 mt-1">Enrollment - Manage Enrolled Student</h1>
             </span>
             <div class="card border-0 shadow-sm mt-4 mb-4 align-content-center">
                 <div class="card-body">
-
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <a href="add_student.php" class="btn btn-outline-success fw-bold">Return Add Student</a>
+                    </div>
                     <!-- Data Table -->
                     <div class="table-responsive rounded-3">
                         <table class="table table-hover border text-center" id="studentTable" style="min-width: 100px;">
@@ -58,7 +59,6 @@ require('db_connect.php');
                                             <td>{$new_stat}</td>
                                             <td>
                                                 <a href='#' class='edit-btn text-decoration-none me-2' data-id='{$row['id']}' data-bs-toggle='modal' data-bs-target='#registerModal'><i class='bi bi-pencil-square text-decoration-none'></i> Edit</a>
-                                                <a href='#' class='delete-btn text-decoration-none text-danger' data-id='{$row['id']}'><i class='bi bi-x-square'></i> Delete</a>
                                             </td>
                                         </tr>";
                                 }
