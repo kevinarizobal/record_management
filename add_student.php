@@ -6,39 +6,18 @@
     <title>Enrollment</title>
     <?php require('links/links.php');?>
      <!-- Include Bootstrap -->
-     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Include DataTables -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            // Initialize the DataTable
-            var table = $('#studentTable').DataTable({
-                "ajax": {
-                    "url": "fetch_students.php", // PHP script to fetch student data
-                    "dataSrc": "data"
-                },
-                "columns": [
-                    { "data": "name" },
-                    { "data": "course" },
-                    { "data": "section" },
-                    { "data": "contact_number" },
-                    { "data": "email" },
-                    { "data": "date_enrolled" }
-                ]
-            });
-        });
-    </script>
-    
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+      <!-- Include DataTables -->
+      <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+      <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+      <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>    
 </head>
 <body class="bg-light">
 <?php require('inc/header.php');?>
 <div class="container-fluid" id="main-content">
     <div class="row">
         <div class="col-lg-10 ms-auto p-4 overflow-hidden">
-            <h1 class="mb-2 mt-1">Enrollment - Add Student</h1>
             <div class="card border-0 shadow-sm mt-4 mb-4 align-content-center">
                 <div class="card-body">
 
@@ -48,7 +27,7 @@
 
                     <!-- Table -->
                     <div class="table-responsive rounded-3">
-                        <table id="studentTable" class="table table-hover border text-center">
+                        <table class="table table-hover border text-center" id="studentTable" style="min-width: 100px;">
                             <thead class="text-start">
                                 <tr class="bg-dark text-light">
                                     <th scope="col">Name</th>
@@ -56,11 +35,38 @@
                                     <th scope="col">Year & Section</th>
                                     <th scope="col">Contact</th>
                                     <th scope="col">Email</th>
+                                    <th scope="col">Status</th>
                                     <th scope="col">Date Enrolled</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody class="text-start">
-                                <!-- DataTables will populate data here -->
+                            <?php
+                                include('db_connect.php');
+                                $query = "SELECT `id`, `name`, `email`, `contact_number`, `profile_picture`, `attachment`, `course`, `section`, `gender`, `date_of_birth`, `school_id`, `address`, `mother_name`, `father_name`, `guardian_contact_number`, `guardian_address`, `status`, `date_enrolled` FROM `students`";
+                                $result = $conn->query($query);
+                                while ($row = $result->fetch_assoc()) {
+                                  if($row['status'] == 0){
+                                    $new_stat = 'Inactive';
+                                  }
+                                  if($row['status'] == 1){
+                                    $new_stat = 'Active';
+                                  }
+                                    echo "<tr id='student-{$row['id']}'>
+                                            <td>{$row['name']}</td>
+                                            <td>{$row['course']}</td>
+                                            <td>{$row['section']}</td>
+                                            <td>{$row['contact_number']}</td>
+                                            <td>{$row['email']}</td>
+                                            <td>{$new_stat}</td>
+                                            <td>{$row['date_enrolled']}</td>
+                                            <td>
+                                                <a href='manage_student.php' class='edit-btn text-decoration-none me-2'><i class='bi bi-pencil-square text-decoration-none'></i> Edit</a>
+                                                <a href='#' class='delete-btn text-decoration-none text-danger' data-id='{$row['id']}'><i class='bi bi-x-square'></i> Delete</a>
+                                            </td>
+                                        </tr>";
+                                }
+                                ?>
                             </tbody>
                         </table>
                     </div>
@@ -108,12 +114,7 @@
                   
                   <div class="col-lg-3 ps-0 mb-3">
                     <label class="form-label">Program</label>
-                    <select class="form-select shadow-none" name="course">
-                        <option value="ICT">ICT</option>
-                        <option value="TST">TST</option>
-                        <option value="BOT">BOT</option>
-                        <option value="BSCS">BSCS</option>
-                    </select>
+                    <input name="course" type="text" class="form-control shadow-none" required>
                   </div>
                   <div class="col-lg-3 mb-3">
                     <label class="form-label">Year level</label>
@@ -121,10 +122,7 @@
                   </div>
                   <div class="col-lg-3 ps-0 mb-3">
                     <label class="form-label">Gender</label>
-                    <select class="form-select shadow-none" name="gender">
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                    </select>
+                    <input name="gender" type="text" class="form-control shadow-none" required>
                   </div>
                   <div class="col-lg-3 p-0 mb-3">
                     <label class="form-label">Date of Birth</label>
@@ -185,8 +183,65 @@
     </div>
 </div>
 
-
 <?php require('inc/script.php'); ?>
-<script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Initialize DataTable
+$(document).ready(function() {
+    $('#studentTable').DataTable();
+
+    // Edit student button click event
+    $('.edit-btn').click(function() {
+        const studentId = $(this).data('id');
+        $.ajax({
+            url: 'get_student.php',
+            method: 'GET',
+            data: { id: studentId },
+            success: function(response) {
+                const student = JSON.parse(response);
+                $('#modal-name').val(student.name);
+                $('#modal-email').val(student.email);
+                $('#modal-snumber').val(student.contact_number);
+                $('#modal-course').val(student.course);
+                $('#modal-section').val(student.section);
+                $('#modal-gender').val(student.gender);
+                $('#modal-dob').val(student.date_of_birth);
+                $('#modal-sid').val(student.school_id);
+                $('#modal-address').val(student.address);
+                $('#modal-mname').val(student.mother_name);
+                $('#modal-fname').val(student.father_name);
+                $('#modal-pnumber').val(student.guardian_contact_number);
+                $('#modal-paddress').val(student.guardian_address);
+                $('#modal-id').val(student.id);
+            }
+        });
+    });
+
+    // Delete student button click event
+    $('.delete-btn').click(function(e) {
+        e.preventDefault();
+        const studentId = $(this).data('id');
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: 'delete_student.php',
+                    method: 'POST',
+                    data: { id: studentId },
+                    success: function() {
+                        $(`#student-${studentId}`).remove();
+                        Swal.fire('Deleted!', 'The student has been deleted.', 'success');
+                    }
+                });
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>
