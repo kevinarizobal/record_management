@@ -63,6 +63,55 @@
                             <i class="bi bi-archive"></i>
                         </a>
                     </li>
+                    <div class="collapse show px-3 small mb-1" id="report">
+                            <ul class="nav nav-pills flex-column rounded border border-white border-secondary">
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="#">Billing Statement</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="#">Certificate Of Completion</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="#">Certificate On Payment</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="#">Certificate Of Recognation</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="#">Employment Report</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="#">Enrollment Report</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="#">CCTV storage</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="#">GSIS</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="#">Letter Of Notifaction</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="#">List Of NSTP</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="#">Notice To Proceed</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="#">RWAC</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="#">Transmittal Letter</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="#">Training Reduction</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" href="#">Terminal Report</a>
+                                </li>
+                            </ul>
+                    </div>
                     <li class="nav-item">
                         <a class="nav-link text-white d-flex justify-content-between align-items-center" href="trash.php">
                             <span>Trash</span>
