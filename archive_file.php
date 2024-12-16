@@ -15,7 +15,7 @@
         <!-- Main content -->
         <div class="col-lg-7 ms-auto p-4 overflow-hidden">
             <span class="d-flex justify-content-between align-items-center">
-                <h1 class="mb-4">File Management</h1>
+                
             </span>
             <!-- Upload and Create Folder -->
             <div class="card border-0 shadow-sm mt-3 mb-5 align-content-center">
@@ -67,7 +67,7 @@
 
         <!-- Preview Section -->
         <div class="col-lg-3 p-4">
-            <h3 class="text-center">Preview</h3>
+            <h3 class="text-center mt-3">Preview</h3>
             <div class="card shadow-sm text-center" id="previewSection">
                 <p class="mt-3">Select a file or folder to preview.</p>
                 <img src="" id="previewImage" class="card-img-top p-2 d-none" style="max-height: 200px;">
