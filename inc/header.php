@@ -103,21 +103,21 @@
                             </button>
                             <div class="collapse px-3 small mb-1" id="report">
                                 <ul class="nav nav-pills flex-column rounded border border-white border-secondary">
-                                    <li class="nav-item"><a class="nav-link text-white" href="#">Billing Statement</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="#">Certificate Of Completion</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="#">Certificate On Payment</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="#">Certificate Of Recognation</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="#">Employment Report</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="#">Enrollment Report</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="#">CCTV storage</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="#">GSIS</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="#">Letter Of Notifaction</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="#">List Of NSTP</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="#">Notice To Proceed</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="#">RWAC</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="#">Transmittal Letter</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="#">Training Reduction</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="#">Terminal Report</a></li>
+                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Billing Statement</a></li>
+                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Certificate Of Completion</a></li>
+                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Certificate On Payment</a></li>
+                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Certificate Of Recognation</a></li>
+                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Employment Report</a></li>
+                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Enrollment Report</a></li>
+                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">CCTV storage</a></li>
+                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">GSIS</a></li>
+                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Letter Of Notifaction</a></li>
+                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">List Of NSTP</a></li>
+                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Notice To Proceed</a></li>
+                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">RWAC</a></li>
+                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Transmittal Letter</a></li>
+                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Training Reduction</a></li>
+                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Terminal Report</a></li>
                                 </ul>
                             </div>
                         </li>
