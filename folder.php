@@ -6,7 +6,7 @@ include('db_connect.php');
 $folder_id = $_GET['id'] ?? null;
 
 if ($folder_id) {
-    // Fetch the folder details based on the given id
+    // Fetch the folder details
     $folder_query = $conn->prepare("SELECT * FROM files WHERE id = ?");
     $folder_query->bind_param("i", $folder_id);
     $folder_query->execute();
@@ -18,8 +18,8 @@ if ($folder_id) {
         die("Folder not found.");
     }
 
-    // Fetch all files and folders in the current folder (where parent_id matches the folder_id)
-    $files_query = $conn->prepare("SELECT * FROM files WHERE parent_id = ?");
+    // Fetch all files and folders in the current folder
+    $files_query = $conn->prepare("SELECT * FROM files WHERE parent_id = ? AND type='file'");
     $files_query->bind_param("i", $folder_id);
     $files_query->execute();
     $files_result = $files_query->get_result();
@@ -61,12 +61,21 @@ if ($folder_id) {
                         <td><?= htmlspecialchars($file['name']) ?></td>
                         <td><?= $file['type'] ?></td>
                         <td>
-                            <?php if ($file['type'] == 'folder'): ?>
-                                <a href="folder.php?id=<?= $file['id'] ?>" class="btn btn-info btn-sm">Open Folder</a>
-                            <?php else: ?>
-                                <a href="download.php?id=<?= $file['id'] ?>" class="btn btn-success btn-sm">Download File</a>
-                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#fileModal" data-file-id="<?= $file['id'] ?>">View Info</button>
-                            <?php endif; ?>
+                            <?php
+                                // Check file extension and render actions accordingly
+                                $file_extension = strtolower(pathinfo($file['path'], PATHINFO_EXTENSION));
+                                $viewable_files = ['png', 'jpeg', 'jpg', 'gif']; // List of viewable image file types
+
+                                if ($file['type'] == 'folder'): ?>
+                                    <a href="folder.php?id=<?= $file['id'] ?>" class="btn btn-info btn-sm">Open Folder</a>
+                                <?php elseif (in_array($file_extension, $viewable_files)): ?>
+                                    <!-- Button to view image files inline -->
+                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#fileModal" data-file-id="<?= $file['id'] ?>">View File</button>
+                                <?php else: ?>
+                                    <!-- Show only file info for non-image files -->
+                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#fileModal" data-file-id="<?= $file['id'] ?>">View Info</button>
+                                    <a href="download.php?id=<?= $file['id'] ?>" class="btn btn-success btn-sm">Download</a>
+                                <?php endif; ?>
                         </td>
                     </tr>
                 <?php endwhile; ?>
@@ -76,19 +85,25 @@ if ($folder_id) {
 
     <!-- Modal -->
     <div class="modal fade" id="fileModal" tabindex="-1" aria-labelledby="fileModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="fileModalLabel">File Information</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p><strong>ID:</strong> <span id="fileId"></span></p>
-                    <p><strong>Name:</strong> <span id="fileName"></span></p>
-                    <p><strong>Path:</strong> <span id="filePath"></span></p>
-                    <p><strong>Type:</strong> <span id="fileType"></span></p>
-                    <p><strong>Created At:</strong> <span id="fileCreatedAt"></span></p>
-                    <p><strong>Modified At:</strong> <span id="fileModifiedAt"></span></p>
+                    <div id="fileViewerContainer">
+                        <!-- Inline file viewer (like an iframe for images) will be loaded here -->
+                        <iframe id="fileViewer" style="width: 100%; height: 500px;" frameborder="0"></iframe>
+                    </div>
+                    <div id="fileInfoContainer">
+                        <p><strong>ID:</strong> <span id="fileId"></span></p>
+                        <p><strong>Name:</strong> <span id="fileName"></span></p>
+                        <p><strong>Path:</strong> <span id="filePath"></span></p>
+                        <p><strong>Type:</strong> <span id="fileType"></span></p>
+                        <p><strong>Created At:</strong> <span id="fileCreatedAt"></span></p>
+                        <p><strong>Modified At:</strong> <span id="fileModifiedAt"></span></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -101,7 +116,6 @@ if ($folder_id) {
         $(document).ready(function() {
             $('#fileTable').DataTable();
 
-            // Fetch file info and show in modal
             $('#fileModal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget); // Button that triggered the modal
                 var fileId = button.data('file-id'); // Extract file ID from data-* attributes
@@ -113,6 +127,22 @@ if ($folder_id) {
                     data: { id: fileId },
                     dataType: 'json',
                     success: function(response) {
+                        // Check if the file is an image or not
+                        var fileExtension = response.path.split('.').pop().toLowerCase();
+                        var viewableTypes = ['png', 'jpeg', 'jpg', 'gif'];
+
+                        // If it's an image, show it in the iframe
+                        if (viewableTypes.includes(fileExtension)) {
+                            $('#fileViewer').attr('src', 'view_file.php?id=' + fileId); // Show image in iframe
+                            $('#fileViewer').show();
+                            $('#fileInfoContainer').hide(); // Hide file info for images
+                        } else {
+                            // Show file information for non-image files
+                            $('#fileViewer').hide(); // Hide the iframe for non-image files
+                            $('#fileInfoContainer').show();
+                        }
+
+                        // Display file information
                         $('#fileId').text(response.id);
                         $('#fileName').text(response.name);
                         $('#filePath').text(response.path);
