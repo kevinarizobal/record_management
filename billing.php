@@ -7,6 +7,11 @@ if (isset($_POST['create_folder'])) {
     $folder_name = $_POST['folder_name'];
     $parent_id = $_POST['parent_id'] ?? null;
 
+    // Optionally override the parent_id (e.g., set to 0 if null, or set to a specific folder ID)
+    if ($parent_id === null) {
+        $parent_id = 0;  // or any other logic to set a default parent_id
+    }
+
     // Construct the folder path
     $folder_path = $parent_id ? "uploads/" . $parent_id . "/" . $folder_name : "uploads/" . $folder_name;
 
@@ -16,10 +21,15 @@ if (isset($_POST['create_folder'])) {
         if (mkdir($folder_path, 0777, true)) {
             // Folder created successfully, now insert into the database
             $stmt = $conn->prepare("INSERT INTO files (name, path, type, parent_id) VALUES (?, ?, 'folder', ?)");
+            if ($stmt === false) {
+                echo "Error: Failed to prepare the statement. " . $conn->error;
+                exit;
+            }
             $stmt->bind_param("ssi", $folder_name, $folder_path, $parent_id);
 
+            // Execute the statement
             if ($stmt->execute()) {
-                echo "Folder created successfully.";
+                echo "Folder created and inserted successfully.";
             } else {
                 echo "Error: Failed to insert folder into the database. " . $stmt->error;
             }
@@ -31,6 +41,7 @@ if (isset($_POST['create_folder'])) {
         echo "Error: Folder already exists.";
     }
 }
+
 
 // Handle file upload
 if (isset($_FILES['file_upload'])) {
@@ -101,6 +112,10 @@ if (isset($_POST['edit_file'])) {
 // Fetch files and folders
 $result = $conn->query("SELECT * FROM files Where type='folder'");
 $num = 1;
+
+$next_id_query = $conn->query("SELECT MAX(id) + 1 AS next_id FROM files");
+$next_id_row = $next_id_query->fetch_assoc();
+$next_id = $next_id_row['next_id'] ?? 1; // Default to 1 if table is empty
 ?>
 
 <!DOCTYPE html>
@@ -194,7 +209,7 @@ $num = 1;
                     </div>
                     <div class="mb-3">
                         <label for="parent_id" class="form-label">Parent Folder</label>
-                        <input type="number" class="form-control" name="parent_id">
+                        <input type="number" class="form-control" name="parent_id" value="<?= $next_id ?>" readonly>
                     </div>
                 </div>
                 <div class="modal-footer">
