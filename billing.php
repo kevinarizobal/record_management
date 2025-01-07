@@ -16,24 +16,15 @@ if (isset($_POST['create_folder'])) {
         if (mkdir($folder_path, 0777, true)) {
             // Folder created successfully, now insert into the database
             $stmt = $conn->prepare("INSERT INTO files (name, path, type, parent_id) VALUES (?, ?, 'folder', ?)");
-            
-            // Bind parameters (considering $parent_id could be null)
-            if ($parent_id === null) {
-                $stmt->bind_param("ssi", $folder_name, $folder_path, $parent_id); // NULL for parent_id
-            } else {
-                $stmt->bind_param("ssi", $folder_name, $folder_path, $parent_id);
-            }
+            $stmt->bind_param("ssi", $folder_name, $folder_path, $parent_id);
 
-            // Execute the query and check for errors
             if ($stmt->execute()) {
                 echo "Folder created successfully.";
             } else {
-                // Fetch and display the error message from MySQL
                 echo "Error: Failed to insert folder into the database. " . $stmt->error;
             }
             $stmt->close();
         } else {
-            // Folder creation failed, display an error
             echo "Error: Unable to create folder. Check directory permissions.";
         }
     } else {
@@ -70,10 +61,31 @@ if (isset($_FILES['file_upload'])) {
 // Handle delete file/folder
 if (isset($_POST['delete_file'])) {
     $id = $_POST['file_id'];
-    $stmt = $conn->prepare("DELETE FROM files WHERE id = ?");
+
+    // First, get the folder path to remove the actual folder
+    $stmt = $conn->prepare("SELECT path FROM files WHERE id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
+    $result = $stmt->get_result();
+    $folder = $result->fetch_assoc();
+    $folder_path = $folder['path'];
+    
+    // Remove folder from database
+    $delete_stmt = $conn->prepare("DELETE FROM files WHERE id = ?");
+    $delete_stmt->bind_param("i", $id);
+    if ($delete_stmt->execute()) {
+        // Delete the folder from the server
+        if (is_dir($folder_path)) {
+            // Recursively delete folder content if needed (if it's not empty)
+            array_map('unlink', glob("$folder_path/*"));
+            rmdir($folder_path); // Delete the empty folder
+        }
+        echo "Folder deleted successfully.";
+    } else {
+        echo "Error: Unable to delete folder from the database.";
+    }
     $stmt->close();
+    $delete_stmt->close();
 }
 
 // Handle edit file/folder
@@ -89,7 +101,6 @@ if (isset($_POST['edit_file'])) {
 // Fetch files and folders
 $result = $conn->query("SELECT * FROM files Where type='folder'");
 $num = 1;
-
 ?>
 
 <!DOCTYPE html>
@@ -287,7 +298,6 @@ $num = 1;
             var button = $(event.relatedTarget);
             var id = button.data('id');
             var name = button.data('name');
-
             var modal = $(this);
             modal.find('#editFileId').val(id);
             modal.find('#editFileName').val(name);
@@ -297,7 +307,6 @@ $num = 1;
             var button = $(event.relatedTarget);
             var id = button.data('id');
             var name = button.data('name');
-
             var modal = $(this);
             modal.find('#deleteFileId').val(id);
             modal.find('#deleteFileName').text(name);
@@ -306,4 +315,3 @@ $num = 1;
 </script>
 </body>
 </html>
-
