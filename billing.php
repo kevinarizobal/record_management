@@ -151,19 +151,13 @@ $next_id = $next_id_row['next_id'] ?? 1; // Default to 1 if table is empty
                             <table id="fileTable" class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>No.</th>
-                                        <th>Name</th>
-                                        <th>Type</th>
-                                        <th>Parent Folder</th>
+                                        <th>Folder</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php while ($row = $result->fetch_assoc()): ?>
                                         <tr>
-                                            <td><?= $num++ ?></td>
-                                            <td><?= $row['name'] ?></td>
-                                            <td><?= $row['type'] ?></td>
                                             <td>
                                                 <?php if ($row['parent_id'] != null): ?>
                                                     <?php
