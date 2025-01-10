@@ -2,6 +2,15 @@
 // Include the database connection
 require('db_connect.php');
 
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    // Redirect to login page if not logged in
+    header("Location: index.php");
+    exit();
+}
+
 // Get the student ID from the URL parameter
 if (isset($_GET['id'])) {
     $id = $_GET['id'];

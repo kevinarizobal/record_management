@@ -97,29 +97,10 @@
 
                         <!-- Archive Files -->
                         <li class="nav-item">
-                            <button class="btn text-white px-3 w-100 shadow-none text-start d-flex align-items-center justify-content-between" type="button" data-bs-toggle="collapse" data-bs-target="#report" aria-expanded="false" aria-controls="report">
-                                <span>Archive files</span>
+                            <a class="nav-link text-white d-flex justify-content-between align-items-center" href="billing.php">
+                                <span>Archive Files</span>
                                 <i class="bi bi-archive"></i>
-                            </button>
-                            <div class="collapse px-3 small mb-1" id="report">
-                                <ul class="nav nav-pills flex-column rounded border border-white border-secondary">
-                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Billing Statement</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Certificate Of Completion</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Certificate On Payment</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Certificate Of Recognation</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Employment Report</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Enrollment Report</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">CCTV storage</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">GSIS</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Letter Of Notifaction</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">List Of NSTP</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Notice To Proceed</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">RWAC</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Transmittal Letter</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Training Reduction</a></li>
-                                    <li class="nav-item"><a class="nav-link text-white" href="billing.php">Terminal Report</a></li>
-                                </ul>
-                            </div>
+                            </a>
                         </li>
 
                         <!-- Trash -->

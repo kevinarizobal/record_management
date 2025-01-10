@@ -2,6 +2,15 @@
 // Database connection
 include('db_connect.php');
 
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    // Redirect to login page if not logged in
+    header("Location: index.php");
+    exit();
+}
+
 // Handle create folder
 if (isset($_POST['create_folder'])) {
     $folder_name = $_POST['folder_name'];
@@ -162,7 +171,8 @@ $next_id = $next_id_row['next_id'] ?? 1; // Default to 1 if table is empty
                                                 <?php if ($row['parent_id'] != null): ?>
                                                     <?php
                                                     // Get parent folder details
-                                                    $parent_result = $conn->query("SELECT name FROM files WHERE id = " . $row['parent_id']);
+                                                    $parent_result = $conn->query("SELECT name FROM files WHERE id = " . $row['parent_id'] . " ORDER BY name ASC");
+
                                                     $parent_row = $parent_result->fetch_assoc();
                                                     ?>
                                                     <a href="folder.php?id=<?= $row['parent_id'] ?>"><?= $parent_row['name'] ?></a>
