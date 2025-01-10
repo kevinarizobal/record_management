@@ -48,7 +48,7 @@ if ($folder_id) {
         <table id="fileTable" class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <!-- <th>ID</th> -->
                     <th>Name</th>
                     <th>Type</th>
                     <th>Actions</th>
@@ -57,7 +57,7 @@ if ($folder_id) {
             <tbody>
                 <?php while ($file = $files_result->fetch_assoc()): ?>
                     <tr>
-                        <td><?= $file['id'] ?></td>
+                        <!-- <td><?= $file['id'] ?></td> -->
                         <td><?= htmlspecialchars($file['name']) ?></td>
                         <td><?= $file['type'] ?></td>
                         <td>
@@ -97,7 +97,7 @@ if ($folder_id) {
                         <iframe id="fileViewer" style="width: 100%; height: 500px;" frameborder="0"></iframe>
                     </div>
                     <div id="fileInfoContainer">
-                        <p><strong>ID:</strong> <span id="fileId"></span></p>
+                        <!-- <p><strong>ID:</strong> <span id="fileId"></span></p> -->
                         <p><strong>Name:</strong> <span id="fileName"></span></p>
                         <p><strong>Path:</strong> <span id="filePath"></span></p>
                         <p><strong>Type:</strong> <span id="fileType"></span></p>

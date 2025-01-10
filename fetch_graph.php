@@ -1,24 +1,38 @@
-<?php 
+<?php
 include("db_connect.php");
 
-// Fetch data for Student Chart
-$studentQuery = "SELECT course, COUNT(*) AS student_count FROM students GROUP BY course";
-$studentResult = $conn->query($studentQuery);
+// Fetch number of students by course
+$sql = "SELECT course, COUNT(*) as count FROM students GROUP BY course";
+$result = mysqli_query($conn, $sql);
+
 $studentData = [];
-while ($row = $studentResult->fetch_assoc()) {
-    $studentData[] = ["label" => $row["course"], "y" => (int)$row["student_count"]];
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $studentData[] = [
+            "label" => $row['course'],
+            "y" => (int)$row['count']
+        ];
+    }
 }
 
-// Fetch data for Active Chart
-$activeQuery = "SELECT status, COUNT(*) AS count FROM students GROUP BY status";
-$activeResult = $conn->query($activeQuery);
+// Fetch active vs dropped students
+$sql = "SELECT status, COUNT(*) as count FROM students GROUP BY status";
+$result = mysqli_query($conn, $sql);
+
 $activeData = [];
-while ($row = $activeResult->fetch_assoc()) {
-    $activeData[] = ["label" => $row["status"], "y" => (int)$row["count"]];
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $label = ($row['status'] == 1) ? "Active" : "Dropped";
+        $activeData[] = [
+            "label" => $label,
+            "y" => (int)$row['count']
+        ];
+    }
 }
 
-// Pass data to the front-end as JSON
-header('Content-Type: application/json');
-echo json_encode(["studentData" => $studentData, "activeData" => $activeData]);
-$conn->close();
+// Return the data as JSON
+echo json_encode([
+    "studentData" => $studentData,
+    "activeData" => $activeData
+]);
 ?>

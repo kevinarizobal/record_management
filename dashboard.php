@@ -1,7 +1,19 @@
 <?php 
 include("db_connect.php");
-?>
 
+// Query to get the number of students by course
+$query = "SELECT course, COUNT(*) AS student_count FROM students GROUP BY course ORDER BY student_count DESC";
+$result = $conn->query($query);
+
+// Prepare dataPoints array for CanvasJS
+$dataPoints = array();
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $dataPoints[] = array("label" => $row['course'], "y" => $row['student_count']);
+    }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -198,53 +210,54 @@ include("db_connect.php");
     </div>
 </div>
 <?php require('inc/script.php'); ?>
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+<script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
 <script src="bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
 <script>
-        // Fetch data from the server
-        fetch('fetch_graph.php')
-            .then(response => response.json())
-            .then(data => {
-                var studentChart = new CanvasJS.Chart("student", {
-                    animationEnabled: true,
-                    theme: "light2",
-                    title: {
-                        text: "Number of Students by Course"
-                    },
-                    axisY: {
-                        title: "Number of Students"
-                    },
-                    axisX: {
-                        title: "Courses"
-                    },
-                    data: [{
-                        type: "column",
-                        dataPoints: data.studentData
-                    }]
-                });
-                studentChart.render();
+fetch('fetch_graph.php')
+    .then(response => response.json())
+    .then(data => {
+        var studentChart = new CanvasJS.Chart("student", {
+            animationEnabled: true,
+            theme: "light2",
+            title: {
+                text: "Number of Students by Course"
+            },
+            axisY: {
+                title: "Number of Students"
+            },
+            axisX: {
+                title: "Courses"
+            },
+            data: [{
+                type: "column",
+                dataPoints: data.studentData
+            }]
+        });
+        studentChart.render();
 
-                var activeChart = new CanvasJS.Chart("active", {
-                    animationEnabled: true,
-                    theme: "light2",
-                    title: {
-                        text: "Active vs. Dropped Students"
-                    },
-                    axisY: {
-                        title: "Number of Students"
-                    },
-                    axisX: {
-                        title: "Status"
-                    },
-                    data: [{
-                        type: "pie",
-                        showInLegend: true,
-                        toolTipContent: "{label}: <strong>{y}</strong>",
-                        dataPoints: data.activeData
-                    }]
-                });
-                activeChart.render();
-            })
-            .catch(error => console.error("Error fetching data:", error));
+        var activeChart = new CanvasJS.Chart("active", {
+            animationEnabled: true,
+            theme: "light2",
+            title: {
+                text: "Active vs. Dropped Students"
+            },
+            axisY: {
+                title: "Number of Students"
+            },
+            axisX: {
+                title: "Status"
+            },
+            data: [{
+                type: "pie",
+                showInLegend: true,
+                toolTipContent: "{label}: <strong>{y}</strong>",
+                dataPoints: data.activeData
+            }]
+        });
+        activeChart.render();
+    })
+    .catch(error => console.error("Error fetching data:", error));
     </script>
 
 </body>
