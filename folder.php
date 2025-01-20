@@ -84,6 +84,7 @@ if ($folder_id) {
                                     <!-- Show only file info for non-image files -->
                                     <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#fileModal" data-file-id="<?= $file['id'] ?>">View Info</button>
                                     <a href="download.php?id=<?= $file['id'] ?>" class="btn btn-success btn-sm">Download</a>
+                                    <a href="delete_folder.php?id=<?= $file['id'] ?>" class="btn btn-danger btn-sm">Delete</a>
                                 <?php endif; ?>
                         </td>
                     </tr>
